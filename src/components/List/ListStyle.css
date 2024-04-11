@@ -33,6 +33,11 @@
   right: 0px;
   color: grey;
 }
+.item-l-icon {
+  position: relative;
+  top: 2px;
+  margin-right: 10px;
+}
 
 @media only screen and (max-width: 1024px) {
   .drag-list {

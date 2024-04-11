@@ -1,23 +1,29 @@
-import React from 'react';
+import React from "react";
 
 import { FaPlus } from "react-icons/fa6";
 import { BsThreeDots } from "react-icons/bs";
+import { HiMiniUserCircle } from "react-icons/hi2";
 
-import Cards from '../Cards/Cards';
+import Cards from "../Cards/Cards";
 
-import './ListStyle.css';
+import "./ListStyle.css";
 
 const List = (props) => {
-  const { listData, ticketsData, groupValue } = { ...props };
+  const { listData, ticketsData, groupValue, orderValue } = { ...props };
 
   const ListItem = (props) => {
-    const { data } = {...props};
+    const { data } = { ...props };
     return (
       <>
         <li className="drag-column">
           <span className="header">
+            <span className="item-l-icon">
+              {data.icon || <HiMiniUserCircle color="black" />}
+            </span>{" "}
             {data.name} <span className="item-count">{getCount(data)}</span>
-            <span className='item-r-icons'><FaPlus /> <BsThreeDots /></span>
+            <span className="item-r-icons">
+              <FaPlus /> <BsThreeDots />
+            </span>
           </span>
           <div className="content">
             <ul className="item-list">{renderCards(data)}</ul>
@@ -28,21 +34,47 @@ const List = (props) => {
   };
 
   const getCount = (data) => {
-    if (groupValue === "status") {
-      let list = ticketsData.filter((crd) => crd.status === data.name);
-      return list.length;
-    } else if (groupValue === "priority") {
-      let list = ticketsData.filter((crd) => crd.priority === data.id);
-      return list.length;
-    } else if (groupValue === "users") {
-      let list = ticketsData.filter((crd) => crd.userId === data.id);
-      return list.length;
+    switch (groupValue) {
+      case "status": {
+        let list = ticketsData.filter((crd) => crd.status === data.name);
+        return list.length;
+        // eslint-disable-next-line
+        break;
+      }
+      case "priority": {
+        let list = ticketsData.filter((crd) => crd.priority === data.id);
+        return list.length;
+        // eslint-disable-next-line
+        break;
+      }
+      case "users": {
+        let list = ticketsData.filter((crd) => crd.userId === data.id);
+        return list.length;
+        // eslint-disable-next-line
+        break;
+      }
+      default:
+        break;
     }
-  }
+  };
+
+  const sortList = (list) => {
+    if (orderValue === "priority") {
+      list = list.sort(function (a, b) {
+        return a.priority - b.priority;
+      });
+    } else if (orderValue === "title") {
+      list = list.sort(function (a, b) {
+        return a.id - b.id;
+      });
+    }
+    return list;
+  };
 
   const renderCards = (data) => {
     if (groupValue === "status") {
       let list = ticketsData.filter((crd) => crd.status === data.name);
+      sortList(list);
       return (
         <>
           {list.map((crd) => {
@@ -52,6 +84,7 @@ const List = (props) => {
       );
     } else if (groupValue === "priority") {
       let list = ticketsData.filter((crd) => crd.priority === data.id);
+      sortList(list);
       return (
         <>
           {list.map((crd) => {
@@ -61,6 +94,7 @@ const List = (props) => {
       );
     } else if (groupValue === "users") {
       let list = ticketsData.filter((crd) => crd.userId === data.id);
+      sortList(list);
       return (
         <>
           {list.map((crd) => {
@@ -69,7 +103,7 @@ const List = (props) => {
         </>
       );
     }
-  }
+  };
 
   return (
     <div className="kanban-list">
@@ -82,6 +116,6 @@ const List = (props) => {
       </ul>
     </div>
   );
-}
+};
 
 export default List;

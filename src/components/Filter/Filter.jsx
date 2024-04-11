@@ -4,24 +4,26 @@ import { VscSettings } from "react-icons/vsc";
 import { IoIosArrowUp } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
 
-import './FilterStyle.css';
+import "./FilterStyle.css";
 
 const Filter = (props) => {
-  const { groupValue } = {...props}
+  const { handleGroupChange, handleSortChange, groupValue, orderValue } = {
+    ...props,
+  };
   const [showDropdown, setShowDropDown] = useState(false);
   const handleFilterClick = () => {
     setShowDropDown((showDrop) => !showDrop);
-  }
+  };
 
   const handleGrouping = (e) => {
     const val = e.target.value;
-    props.handleGroupChange(val);
-  }
+    handleGroupChange(val);
+  };
 
   const handleOrdering = (e) => {
     const val = e.target.value;
-    props.handleSortChange(val);
-  }
+    handleSortChange(val);
+  };
 
   return (
     <div className="kanban-filter">
@@ -47,6 +49,7 @@ const Filter = (props) => {
           <div className="drop-div">
             Ordering
             <select
+              value={orderValue}
               className="filterSel"
               name="order"
               onChange={handleOrdering}
@@ -61,6 +64,6 @@ const Filter = (props) => {
       )}
     </div>
   );
-}
+};
 
 export default Filter;
